@@ -1,0 +1,82 @@
+class Main {
+  constructor() {
+    this.header = document.querySelector(".header");
+    this.hero = new HeroSlider(".swiper");
+    this.sides = document.querySelectorAll(".side");
+    this._observers = [];
+    this._init();
+  }
+
+  destroy() {
+    this._observers.forEach((so) => so.destroy());
+  }
+
+  _init() {
+    new MobileMenu();
+    Pace.on("done", this._scrollInit.bind(this));
+  }
+
+  _scrollInit() {
+    this._observers.push(
+      // 交差監視オブジェクトとtoggleSlideAnimationの有効化
+      new ScrollObserver("#main-content", this._sideAnimation.bind(this), {
+        once: false,
+        rootMargine: "-300px 0px"
+      }),
+      // 交差監視オブジェクトとtoggleSlideAnimationの有効化
+      new ScrollObserver(".swiper", this._toggleSlideAnimation.bind(this), {
+        once: false,
+      }),
+      // 交差監視オブジェクトとnavAnimationの有効化
+      new ScrollObserver(".nav-trigger", this._navAnimation.bind(this), {
+        once: false,
+      }),
+      // 交差監視オブジェクトとinviewAnimationの有効化
+      new ScrollObserver(".cover-slide", this._inviewAnimation),
+      new ScrollObserver(".appear", this._inviewAnimation),
+      // 交差監視オブジェクトとTweenTextAnimationの有効化
+      new ScrollObserver(".tween-animate-title", this._textAnimation)
+    );
+  }
+
+  _toggleSlideAnimation(el, inview) {
+    if (inview) {
+      this.hero.start();
+    } else {
+      this.hero.stop();
+    }
+  }
+
+  _textAnimation(el, inview) {
+    if (inview) {
+      const ta = new TweenTextAnimation(el);
+      ta.animate();
+    }
+  }
+
+  _navAnimation(el, inview) {
+    if (inview) {
+      this.header.classList.remove("triggerd");
+    } else {
+      this.header.classList.add("triggerd");
+    }
+  }
+
+  _sideAnimation(el, inview) {
+    if (inview) {
+      this.sides.forEach((side) => side.classList.add("inview"));
+    } else {
+      this.sides.forEach((side) => side.classList.remove("inview"));
+    }
+  }
+
+  _inviewAnimation(el, inview) {
+    if (inview) {
+      el.classList.add("inview");
+    } else {
+      el.classList.remove("inview");
+    }
+  }
+}
+
+new Main();
