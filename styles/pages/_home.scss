@@ -313,7 +313,7 @@ main {
   // 他でも.logoを使うので個別のスタイルは.logoには記述しない
   & > .logo {
     font-size: 38px;
-    justify-self: center;
+    justify-content: center;
 
     @include mq(md) {
       justify-content: flex-start;
