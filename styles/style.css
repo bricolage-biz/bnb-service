@@ -1326,7 +1326,9 @@ main {
 }
 .footer > .logo {
   font-size: 38px;
-  justify-self: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 @media screen and (min-width: 600px) {
   .footer > .logo {
